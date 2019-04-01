@@ -12,17 +12,40 @@ from utils.feature_importance import find_importances
 
 
 
-# ======= read data
-mod=json.loads(open('ruth_model','r').read())
-y=np.array(list(map(int, mod['labeled'])))
-X_text=mod['url_text']
+# ======= read the files
+data_dir='../../data/'
+final_json=open(data_dir+'400_final_json.json')
+X_text=[]
+y=[]
+urls=[]
+for jsn in final_json:
+    content=clean(jsn['content'])
+    if content == '':
+        continue
+    X_text.append(content)
+    y.append(float(jsn['class']))
+    urls.append(jsn['url'])
 
 
 
-# ======= for a specific train-test split fit the model using test, then find the feature importance using the library
+# ======= squish some labels together:
+y_new=[]
+for label in y:
+    if label in [2,3,4]:
+        label=3
+    y_new.append(label)
+y=y_new
+y=np.array(y)
+
+
+
+# ======= create splits
 splits = StratifiedShuffleSplit(n_splits=50, test_size=0.3, random_state=0)
 
-topics=open('topic_keywords.txt','r').read().split('====\n')
+
+
+# find importances for keywords from each topic
+topics=open(data_dir+'topic_keywords.txt','r').read().split('====\n')
 for topic_num, topic in enumerate(topics):
     keywords=topic.strip().split('\n')
     # topical keywords model
