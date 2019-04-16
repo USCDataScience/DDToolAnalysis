@@ -10,10 +10,12 @@ from utils.utils import *
 
 from utils.feature_importance import find_importances
 
-
+output_dir='output/'
+temp_dir='temp/'
+data_dir='../../data/'
 
 # ======= read data
-mod=json.loads(open('ruth_model','r').read())
+mod=json.loads(open(data_dir+'ruth_model','r').read())
 y=np.array(list(map(int, mod['labeled'])))
 X_text=mod['url_text']
 
@@ -33,11 +35,11 @@ importances_n_gram=find_importances(X,y,count_vect.get_feature_names(),splits)
 
 # ======= save
 
-savemodel(importances_n_gram,'importances_n_gram_ruth')
+savemodel(importances_n_gram, temp_dir+'importances_n_gram_ruth')
 
 # # ======= load
 #
-# importances_n_gram=loadmodel('importances_n_gram_ruth')
+# importances_n_gram=loadmodel(temp_dir+'importances_n_gram_ruth')
 
 # ======= plot :
 def plot_plot(x, y, color, filename):
@@ -63,5 +65,5 @@ n_gram_importance_lookup={k:v for k,v in zip(n_grams,n_gram_importances)}
 
 
 color=len(n_gram_importances)*[usual_color]
-plot_plot(n_grams,n_gram_importances,color,'importances_n_gram_ruth')
+plot_plot(n_grams,n_gram_importances,color,output_dir+'importances_n_gram_ruth')
 

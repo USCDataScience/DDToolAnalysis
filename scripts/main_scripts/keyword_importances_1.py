@@ -10,10 +10,11 @@ from utils.utils import *
 
 from utils.feature_importance import find_importances
 
-
+output_dir='output/'
+temp_dir='temp/'
+data_dir='../../data/'
 
 # ======= read the files
-data_dir='../../data/'
 final_json=open(data_dir+'400_final_json.json')
 X_text=[]
 y=[]
@@ -62,11 +63,11 @@ for topic_num, topic in enumerate(topics):
 
     # save stuff
 
-    savemodel(importances_topical_keywords, 'importances_topical_keywords')
+    savemodel(importances_topical_keywords, temp_dir+'importances_topical_keywords')
 
     # load stuff
 
-    importances_topical_keywords=loadmodel('importances_topical_keywords')
+    importances_topical_keywords=loadmodel(temp_dir+'importances_topical_keywords')
 
     # plot stuff:
     def plot_plot(x, y, color, filename):
@@ -93,5 +94,5 @@ for topic_num, topic in enumerate(topics):
 
 
     color=[usual_color]*len(topical_keywords)
-    plot_plot(topical_keywords,topical_keyword_importances, color,'importances_topical_keyword_'+str(topic_num))
+    plot_plot(topical_keywords,topical_keyword_importances, color, output_dir+'importances_topical_keyword_'+str(topic_num))
 

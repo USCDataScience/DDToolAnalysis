@@ -10,10 +10,11 @@ from utils.utils import *
 
 from utils.feature_importance import find_importances
 
-
+output_dir='output/'
+temp_dir='temp/'
+data_dir='../../data/'
 
 # ======= read the files
-data_dir='../../data/'
 final_json=open(data_dir+'400_final_json.json')
 X_text=[]
 y=[]
@@ -78,15 +79,15 @@ importances_n_gram=find_importances(X,y,count_vect.get_feature_names(),splits)
 
 # ======= save stuff
 
-savemodel(importances_n_gram,'importances_n_gram')
-savemodel(importances_keywords, 'importances_keywords')
-savemodel(importances_topical_keywords, 'importances_topical_keywords')
+savemodel(importances_n_gram,temp_dir+'importances_n_gram')
+savemodel(importances_keywords, temp_dir+'importances_keywords')
+savemodel(importances_topical_keywords, temp_dir+'importances_topical_keywords')
 
 # ======= load stuff
 
-importances_n_gram=loadmodel('importances_n_gram')
-importances_keywords=loadmodel('importances_keywords')
-importances_topical_keywords=loadmodel('importances_topical_keywords')
+importances_n_gram=loadmodel(temp_dir+'importances_n_gram')
+importances_keywords=loadmodel(temp_dir+'importances_keywords')
+importances_topical_keywords=loadmodel(temp_dir+'importances_topical_keywords')
 
 #  ======= plot stuff:
 def plot_plot(x, y, color, filename):
@@ -126,12 +127,12 @@ for keyword in keywords:
     else:
         color.append(spl_color_neg)
 
-plot_plot(keywords,keyword_importances,color,'importances_keyword')
+plot_plot(keywords,keyword_importances,color,data_dir+'importances_keyword')
 
 
 
 color=[usual_color]*len(topical_keywords)
-plot_plot(topical_keywords,topical_keyword_importances,color,'importances_topical_keyword')
+plot_plot(topical_keywords,topical_keyword_importances,color,data_dir+'importances_topical_keyword')
 
 
 color=[]
@@ -151,6 +152,6 @@ for n_gram in n_grams:
         y.append(n_gram_importance_lookup[n_gram])
     else:
         color.append(usual_color)
-plot_plot(x,y,color_filtered,'importances_n_gram_filtered')
-plot_plot(n_grams,n_gram_importances,color,'importances_n_gram')
+plot_plot(x,y,color_filtered,data_dir+'importances_n_gram_filtered')
+plot_plot(n_grams,n_gram_importances,color,data_dir+'importances_n_gram')
 
